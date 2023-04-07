@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('date_plans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('plan_id')->constrained('plans');
+            $table->date('date');
             $table->timestamps();
         });
     }
