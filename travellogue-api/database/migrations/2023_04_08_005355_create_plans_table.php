@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->foreignId('user_id')->constrained('users');
+            $table->unsignedBigInteger('date_number');
             $table->timestamps();
         });
     }
