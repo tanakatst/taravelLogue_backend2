@@ -39,6 +39,8 @@ class PostController extends Controller
             'user_id' => \Auth::user()->id(),
             'content' => $request->content,
         ]);
+        return response()->json($post);
+
     }
 
     /**
