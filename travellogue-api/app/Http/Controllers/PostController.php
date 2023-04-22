@@ -13,7 +13,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::where('user_id', "=", \Auth::user()->id()) ->get();
+        // ログイン済みユーザーのゲット
+        return response()->json($posts);
     }
 
     /**
@@ -21,7 +23,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -29,7 +31,16 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        $post = Post::create([
+            'title' => $request->title,
+            'prefecture' => $request->prefecture,
+            'date' => $request->date,
+            'place_name' => $request->place_name,
+            'user_id' => \Auth::user()->id(),
+            'content' => $request->content,
+        ]);
+        return response()->json($post);
+
     }
 
     /**
@@ -53,7 +64,15 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $post = Post::find('id', '=', $post->id);
+        $post->title = $request->title;
+        $post->prefecture = $request->prefecture;
+        $post->date = $request->date;
+        $post->place_name = $request->place_name;
+        $post->content = $request->content;
+        return $post->save()
+            ?response()->json($post)
+            :response()->json([],500);
     }
 
     /**
@@ -61,6 +80,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        return $post->delete()
+            ? response()->json($post)
+            : response()->json([],500);
     }
 }

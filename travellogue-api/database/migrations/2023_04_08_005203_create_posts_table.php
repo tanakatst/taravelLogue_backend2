@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('prefecture')->nullable();
+            $table->dateTime('date')->nullable();
             $table->string('place_name')->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->text('content');
