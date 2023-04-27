@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
@@ -13,9 +14,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('user_id', "=", \Auth::user()->id()) ->get();
+        if(Auth::check()){
+            $posts = Post::where('user_id', "=", Auth::user()->id)->paginate(10);
+            return response()->json($posts);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
         // ログイン済みユーザーのゲット
-        return response()->json($posts);
     }
 
     /**
@@ -36,7 +41,7 @@ class PostController extends Controller
             'prefecture' => $request->prefecture,
             'date' => $request->date,
             'place_name' => $request->place_name,
-            'user_id' => \Auth::user()->id(),
+            'user_id' => Auth::user()->id,
             'content' => $request->content,
         ]);
         return response()->json($post);
